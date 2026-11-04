@@ -1,0 +1,27 @@
+{
+  "name": "apple-on-device-llm-explainer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "studio": "remotion studio src/index.ts --port 3000",
+    "preview": "node render-preview.mjs",
+    "render:4k": "node render-4k.mjs",
+    "render:4k:test": "node render-4k.mjs --test",
+    "still": "remotion still src/index.ts AppleExplainer",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.540",
+    "@remotion/bundler": "4.0.540",
+    "@remotion/renderer": "4.0.540",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.540",
+    "roughjs": "4.6.6"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "typescript": "5.9.3"
+  }
+}

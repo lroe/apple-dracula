@@ -1,0 +1,1447 @@
+1
+00:00:00,540 --> 00:00:03,160
+(Transcribed by TurboScribe. Go Unlimited to remove this message.) Apple runs a 3 billion parameter language model
+
+2
+00:00:03,160 --> 00:00:04,340
+right on your iPhone.
+
+3
+00:00:04,880 --> 00:00:08,240
+That's about 3 billion numbers, called parameters, sitting
+
+4
+00:00:08,240 --> 00:00:09,060
+in the phone's memory.
+
+5
+00:00:09,600 --> 00:00:12,840
+The model summarizes text, pulls out key facts,
+
+6
+00:00:12,980 --> 00:00:14,420
+and sorts things into categories.
+
+7
+00:00:14,840 --> 00:00:16,760
+It does all of that while sharing the
+
+8
+00:00:16,760 --> 00:00:19,100
+phone with the operating system and whatever apps
+
+9
+00:00:19,100 --> 00:00:19,660
+you've got open.
+
+10
+00:00:20,300 --> 00:00:22,440
+And somehow the phone doesn't slow down.
+
+11
+00:00:22,820 --> 00:00:24,800
+It doesn't get hot, the battery still makes
+
+12
+00:00:24,800 --> 00:00:25,560
+it pass lunch.
+
+13
+00:00:26,440 --> 00:00:28,340
+So how did Apple do it?
+
+14
+00:00:29,020 --> 00:00:31,420
+It's a pile of small, careful decisions.
+
+15
+00:00:31,940 --> 00:00:33,100
+And I want to walk through them one
+
+16
+00:00:33,100 --> 00:00:34,560
+by one, in plain words.
+
+17
+00:00:35,180 --> 00:00:37,320
+If you build apps with AI, they're worth
+
+18
+00:00:37,320 --> 00:00:39,480
+knowing, because they show how to think when
+
+19
+00:00:39,480 --> 00:00:40,720
+you don't have much to work with.
+
+20
+00:00:41,520 --> 00:00:42,680
+Let's start with the problem.
+
+21
+00:00:43,400 --> 00:00:45,860
+A language model reads text as tokens.
+
+22
+00:00:46,340 --> 00:00:48,180
+A token might be a whole word, a
+
+23
+00:00:48,180 --> 00:00:49,920
+piece of a word, or just a punctuation
+
+24
+00:00:49,920 --> 00:00:50,220
+mark.
+
+25
+00:00:50,660 --> 00:00:53,140
+Tokens go in, the model's answer comes back
+
+26
+00:00:53,140 --> 00:00:54,060
+out as new tokens.
+
+27
+00:00:54,060 --> 00:00:56,320
+And in between, they pass through a lot
+
+28
+00:00:56,320 --> 00:00:56,860
+of layers.
+
+29
+00:00:57,720 --> 00:00:59,500
+Two things make this hard on a phone.
+
+30
+00:01:00,020 --> 00:01:01,360
+The first is space.
+
+31
+00:01:01,940 --> 00:01:05,060
+At 16-bit precision, 3 billion parameters take
+
+32
+00:01:05,060 --> 00:01:06,300
+up almost 6 gigabytes.
+
+33
+00:01:06,920 --> 00:01:08,280
+And that's before anything else.
+
+34
+00:01:08,600 --> 00:01:10,860
+The model also needs room for your prompt,
+
+35
+00:01:11,140 --> 00:01:14,200
+its calculations, and temporary results, while the phone
+
+36
+00:01:14,200 --> 00:01:16,200
+is still running the operating system and your
+
+37
+00:01:16,200 --> 00:01:17,640
+other apps out of the same memory.
+
+38
+00:01:17,980 --> 00:01:19,980
+The model can't have the whole house.
+
+39
+00:01:20,540 --> 00:01:23,340
+The second is speed, or really, how fast
+
+40
+00:01:23,340 --> 00:01:24,240
+data can move.
+
+41
+00:01:24,880 --> 00:01:27,240
+When the model writes text, the processor keeps
+
+42
+00:01:27,240 --> 00:01:29,740
+pulling numbers out of memory, again and again.
+
+43
+00:01:30,260 --> 00:01:32,240
+Even a very fast chip ends up waiting
+
+44
+00:01:32,240 --> 00:01:32,620
+on them.
+
+45
+00:01:33,040 --> 00:01:34,920
+It's like a lightning-fast chef with a
+
+46
+00:01:34,920 --> 00:01:36,900
+slow helper bringing the ingredients.
+
+47
+00:01:37,340 --> 00:01:38,940
+The chef spends most of the day standing
+
+48
+00:01:38,940 --> 00:01:39,300
+around.
+
+49
+00:01:40,060 --> 00:01:41,820
+On top of that, the phone has to
+
+50
+00:01:41,820 --> 00:01:44,500
+save battery, stay cool, and keep every other
+
+51
+00:01:44,500 --> 00:01:45,320
+app responsive.
+
+52
+00:01:46,060 --> 00:01:48,400
+Nobody wants an AI feature that freezes the
+
+53
+00:01:48,400 --> 00:01:49,000
+whole phone.
+
+54
+00:01:49,720 --> 00:01:51,180
+So those are the two walls.
+
+55
+00:01:51,620 --> 00:01:53,560
+How much memory you have, and how fast
+
+56
+00:01:53,560 --> 00:01:54,860
+you can move data through it.
+
+57
+00:01:55,400 --> 00:01:57,180
+Every trick from here on goes after one
+
+58
+00:01:57,180 --> 00:01:57,440
+of them.
+
+59
+00:01:58,060 --> 00:01:58,500
+Trick one.
+
+60
+00:01:58,980 --> 00:02:00,460
+Make every number smaller.
+
+61
+00:02:00,960 --> 00:02:03,100
+The most direct way to shrink a model
+
+62
+00:02:03,100 --> 00:02:05,200
+is to use fewer bits for each weight.
+
+63
+00:02:05,620 --> 00:02:07,139
+That's called quantization.
+
+64
+00:02:07,919 --> 00:02:10,620
+Picture a box of a thousand crayons, each
+
+65
+00:02:10,620 --> 00:02:13,100
+one a slightly different shade, next to a
+
+66
+00:02:13,100 --> 00:02:14,340
+box of just 16.
+
+67
+00:02:15,000 --> 00:02:17,780
+You lose some subtle differences, but the drawing
+
+68
+00:02:17,780 --> 00:02:18,660
+still looks great.
+
+69
+00:02:19,000 --> 00:02:21,540
+The hard part is finding the balance, where
+
+70
+00:02:21,540 --> 00:02:23,260
+you save a lot of memory and the
+
+71
+00:02:23,260 --> 00:02:24,480
+quality stays good.
+
+72
+00:02:25,300 --> 00:02:28,480
+Apple uses a kind of quantization called palettization.
+
+73
+00:02:28,880 --> 00:02:31,080
+The name comes from a painter's palette, but
+
+74
+00:02:31,080 --> 00:02:32,980
+paint-by-number is an easier way to
+
+75
+00:02:32,980 --> 00:02:33,620
+understand it.
+
+76
+00:02:34,280 --> 00:02:36,060
+In a paint-by-number picture, you don't
+
+77
+00:02:36,060 --> 00:02:37,820
+write the colour name on every spot.
+
+78
+00:02:38,000 --> 00:02:40,220
+You write a small number, like one, two,
+
+79
+00:02:40,320 --> 00:02:40,780
+or three.
+
+80
+00:02:41,040 --> 00:02:42,680
+And a key at the bottom says which
+
+81
+00:02:42,680 --> 00:02:43,900
+paint each number means.
+
+82
+00:02:44,780 --> 00:02:46,580
+Palettization does the same thing with weights.
+
+83
+00:02:47,100 --> 00:02:48,620
+A lot of weights have nearly the same
+
+84
+00:02:48,620 --> 00:02:50,100
+value, so you put them in groups.
+
+85
+00:02:50,540 --> 00:02:53,080
+A small lookup table holds one example value
+
+86
+00:02:53,080 --> 00:02:55,200
+per group, and that table is the key.
+
+87
+00:02:55,920 --> 00:02:57,760
+Each weight then stores just a short note
+
+88
+00:02:57,760 --> 00:02:59,420
+that points to a spot in the table.
+
+89
+00:03:00,140 --> 00:03:01,480
+How short can that note be?
+
+90
+00:03:02,120 --> 00:03:03,980
+A bit is a zero or a one.
+
+91
+00:03:04,300 --> 00:03:06,260
+So two bits give you four different notes,
+
+92
+00:03:06,380 --> 00:03:07,760
+enough to point to one of four table
+
+93
+00:03:07,760 --> 00:03:08,100
+entries.
+
+94
+00:03:08,560 --> 00:03:09,820
+Four bits give you 16.
+
+95
+00:03:10,380 --> 00:03:12,500
+Compared to a normal 16-bit number, a
+
+96
+00:03:12,500 --> 00:03:14,560
+two-bit note is eight times smaller.
+
+97
+00:03:15,300 --> 00:03:17,120
+In an earlier version of the model, Apple
+
+98
+00:03:17,120 --> 00:03:18,980
+mixed two-bit and four-bit notes.
+
+99
+00:03:19,280 --> 00:03:21,000
+So some weights got two bits, and others
+
+100
+00:03:21,000 --> 00:03:21,500
+got four.
+
+101
+00:03:21,720 --> 00:03:23,960
+On average, that came to 3.7 bits
+
+102
+00:03:23,960 --> 00:03:24,440
+per weight.
+
+103
+00:03:25,180 --> 00:03:25,920
+Let's run the numbers.
+
+104
+00:03:26,500 --> 00:03:28,720
+3 billion weights at 3.7 bits each
+
+105
+00:03:28,720 --> 00:03:30,900
+is about 11.1 billion bits.
+
+106
+00:03:31,300 --> 00:03:33,200
+Divide by 8 to get bytes, and you
+
+107
+00:03:33,200 --> 00:03:35,120
+land at roughly 1.39 gigabytes.
+
+108
+00:03:35,880 --> 00:03:37,720
+Compare that to the almost 6 gigabytes we
+
+109
+00:03:37,720 --> 00:03:38,980
+had at 16 bits.
+
+110
+00:03:39,200 --> 00:03:40,380
+It's less than a quarter.
+
+111
+00:03:41,020 --> 00:03:42,660
+So why mix sizes at all?
+
+112
+00:03:42,920 --> 00:03:44,760
+Because not every part of a model is
+
+113
+00:03:44,760 --> 00:03:45,600
+equally sensitive.
+
+114
+00:03:46,180 --> 00:03:47,240
+It's like packing a box.
+
+115
+00:03:47,640 --> 00:03:49,700
+Socks can get squished flat, but a glass
+
+116
+00:03:49,700 --> 00:03:51,240
+vase needs a lot of bubble wrap.
+
+117
+00:03:51,980 --> 00:03:53,520
+Some parts of the model are socks.
+
+118
+00:03:54,080 --> 00:03:55,320
+Apple squeezes those harder.
+
+119
+00:03:55,740 --> 00:03:57,780
+Others are vases, and they get more bits.
+
+120
+00:03:58,440 --> 00:04:00,380
+The newer model goes further.
+
+121
+00:04:01,040 --> 00:04:03,000
+The main decoder weights are down to two
+
+122
+00:04:03,000 --> 00:04:05,440
+bits each, and the embedding table uses four
+
+123
+00:04:05,440 --> 00:04:05,980
+bits each.
+
+124
+00:04:06,660 --> 00:04:09,040
+The decoder is the main body of the
+
+125
+00:04:09,040 --> 00:04:11,000
+model, the part that does the thinking and
+
+126
+00:04:11,000 --> 00:04:13,160
+writes the answer one token at a time.
+
+127
+00:04:13,940 --> 00:04:15,820
+The embedding table works like a dictionary.
+
+128
+00:04:16,420 --> 00:04:17,820
+You look up a token, and it gives
+
+129
+00:04:17,820 --> 00:04:19,180
+you back a list of numbers the model
+
+130
+00:04:19,180 --> 00:04:19,740
+can use.
+
+131
+00:04:20,420 --> 00:04:21,320
+There's a catch, though.
+
+132
+00:04:21,980 --> 00:04:24,200
+Rounding every number to a handful of choices
+
+133
+00:04:24,200 --> 00:04:25,400
+is a big change.
+
+134
+00:04:25,700 --> 00:04:27,360
+If you do it after the model has
+
+135
+00:04:27,360 --> 00:04:30,060
+finished learning, the small errors pile up and
+
+136
+00:04:30,060 --> 00:04:30,980
+the answers get worse.
+
+137
+00:04:31,640 --> 00:04:34,960
+So Apple uses something called quantization-aware training.
+
+138
+00:04:35,600 --> 00:04:37,440
+Instead of squeezing the model at the end,
+
+139
+00:04:37,780 --> 00:04:39,560
+you squeeze it while it's still learning.
+
+140
+00:04:40,140 --> 00:04:41,780
+From the start, the model works with the
+
+141
+00:04:41,780 --> 00:04:43,780
+small set of values it'll actually use.
+
+142
+00:04:44,240 --> 00:04:46,380
+It attempts its task, sees where it goes
+
+143
+00:04:46,380 --> 00:04:48,680
+wrong, and its weights get nudged to fix
+
+144
+00:04:48,680 --> 00:04:51,140
+those mistakes, with the squeezing rules still in
+
+145
+00:04:51,140 --> 00:04:51,460
+place.
+
+146
+00:04:52,020 --> 00:04:54,020
+That loop repeats all through training.
+
+147
+00:04:54,780 --> 00:04:56,420
+It's like a drawing test where you only
+
+148
+00:04:56,420 --> 00:04:57,420
+get four crayons.
+
+149
+00:04:57,820 --> 00:04:59,860
+If you practice with a thousand and switch
+
+150
+00:04:59,860 --> 00:05:02,020
+on test day, your drawing comes out messy.
+
+151
+00:05:02,020 --> 00:05:04,320
+If you practice with four the whole time,
+
+152
+00:05:04,620 --> 00:05:06,060
+you learn how to make a good picture
+
+153
+00:05:06,060 --> 00:05:06,600
+anyway.
+
+154
+00:05:07,540 --> 00:05:09,980
+For developers, that means you shouldn't shrink a
+
+155
+00:05:09,980 --> 00:05:12,040
+finished model and just hope it holds up.
+
+156
+00:05:12,560 --> 00:05:14,440
+Train it knowing it's going to be shrunk.
+
+157
+00:05:14,940 --> 00:05:15,280
+Trick two.
+
+158
+00:05:15,780 --> 00:05:17,460
+Don't do the same homework twice.
+
+159
+00:05:18,460 --> 00:05:20,300
+Small weights are only half of the memory
+
+160
+00:05:20,300 --> 00:05:20,680
+story.
+
+161
+00:05:21,280 --> 00:05:23,240
+The model needs memory while it works, too.
+
+162
+00:05:24,020 --> 00:05:26,440
+Say it's read a paragraph and started answering.
+
+163
+00:05:26,920 --> 00:05:28,960
+To guess the next token, it needs information
+
+164
+00:05:28,960 --> 00:05:30,220
+from all the earlier ones.
+
+165
+00:05:30,780 --> 00:05:33,560
+If it redid every calculation from scratch each
+
+166
+00:05:33,560 --> 00:05:35,300
+time, it would waste a huge amount of
+
+167
+00:05:35,300 --> 00:05:35,580
+work.
+
+168
+00:05:36,120 --> 00:05:38,620
+So it keeps a KV cache, short for
+
+169
+00:05:38,620 --> 00:05:39,720
+key value cache.
+
+170
+00:05:40,200 --> 00:05:41,900
+It's a notebook where the model writes down
+
+171
+00:05:41,900 --> 00:05:43,860
+results it already worked out, so it can
+
+172
+00:05:43,860 --> 00:05:45,920
+look them up next time instead of recalculating.
+
+173
+00:05:46,440 --> 00:05:49,140
+But the notebook costs memory, and it gets
+
+174
+00:05:49,140 --> 00:05:50,720
+bigger as the text gets longer.
+
+175
+00:05:51,320 --> 00:05:53,480
+A model's weights can fit just fine, and
+
+176
+00:05:53,480 --> 00:05:54,800
+it can still run into trouble on a
+
+177
+00:05:54,800 --> 00:05:57,140
+long document because the notebook gets too fat.
+
+178
+00:05:58,000 --> 00:05:59,300
+So now you've got two targets.
+
+179
+00:05:59,300 --> 00:06:01,860
+Shrink the weights, and shrink the cache.
+
+180
+00:06:02,540 --> 00:06:05,220
+For the cache, Apple uses cross-layer KV
+
+181
+00:06:05,220 --> 00:06:05,740
+sharing.
+
+182
+00:06:06,340 --> 00:06:08,020
+Instead of every layer keeping its own notebooks,
+
+183
+00:06:08,180 --> 00:06:09,380
+some layers share one.
+
+184
+00:06:10,000 --> 00:06:12,080
+Imagine the model as a building with eight
+
+185
+00:06:12,080 --> 00:06:12,520
+floors.
+
+186
+00:06:13,040 --> 00:06:15,020
+The bottom five each keep their own notes,
+
+187
+00:06:15,280 --> 00:06:17,480
+the top three keep none and just read
+
+188
+00:06:17,480 --> 00:06:18,720
+the notes from floor five.
+
+189
+00:06:19,300 --> 00:06:21,360
+That's three notebooks gone out of eight, and
+
+190
+00:06:21,360 --> 00:06:23,760
+three over eight is 0.375, so the
+
+191
+00:06:23,760 --> 00:06:26,480
+cache uses 37.5% less memory.
+
+192
+00:06:27,100 --> 00:06:29,220
+The lesson for developers is to not stop
+
+193
+00:06:29,220 --> 00:06:30,700
+at the weights when you plan memory.
+
+194
+00:06:31,140 --> 00:06:33,200
+With long inputs, the cache matters just as
+
+195
+00:06:33,200 --> 00:06:33,500
+much.
+
+196
+00:06:37,140 --> 00:06:39,960
+Compression makes one model smaller, but a phone
+
+197
+00:06:39,960 --> 00:06:41,200
+needs a lot of different features.
+
+198
+00:06:41,600 --> 00:06:45,060
+One writes short notification summaries, another rewrites long
+
+199
+00:06:45,060 --> 00:06:47,280
+text in a different style, another pulls out
+
+200
+00:06:47,280 --> 00:06:47,900
+key facts.
+
+201
+00:06:48,560 --> 00:06:50,120
+The lazy way is to build a separate
+
+202
+00:06:50,120 --> 00:06:51,200
+model for every job.
+
+203
+00:06:51,460 --> 00:06:53,280
+But they'd all share the same basic language
+
+204
+00:06:53,280 --> 00:06:55,180
+skills, so you'd be storing the same knowledge
+
+205
+00:06:55,180 --> 00:06:55,900
+over and over.
+
+206
+00:06:56,620 --> 00:06:57,700
+Adapters fix that.
+
+207
+00:06:58,400 --> 00:07:00,000
+An adapter is a small set of extra
+
+208
+00:07:00,000 --> 00:07:02,280
+parameters that changes how the base model behaves
+
+209
+00:07:02,280 --> 00:07:03,120
+for one task.
+
+210
+00:07:03,600 --> 00:07:05,100
+The base model is the actor, and the
+
+211
+00:07:05,100 --> 00:07:06,000
+adapter is the costume.
+
+212
+00:07:06,460 --> 00:07:07,740
+Same actor, different hats.
+
+213
+00:07:08,560 --> 00:07:10,580
+Adapters are built with a method called LoRa,
+
+214
+00:07:10,980 --> 00:07:12,760
+short for low-rank adaptation.
+
+215
+00:07:13,540 --> 00:07:15,320
+You freeze the base model so its weights
+
+216
+00:07:15,320 --> 00:07:17,540
+never change, add a few small pieces on
+
+217
+00:07:17,540 --> 00:07:19,560
+top and train only those pieces for the
+
+218
+00:07:19,560 --> 00:07:20,060
+new task.
+
+219
+00:07:20,540 --> 00:07:23,280
+That's far cheaper than training or shipping a
+
+220
+00:07:23,280 --> 00:07:23,940
+whole new model.
+
+221
+00:07:24,580 --> 00:07:26,560
+Each of Apple's adapters is only tens of
+
+222
+00:07:26,560 --> 00:07:28,520
+megabytes, which is a tiny fraction of the
+
+223
+00:07:28,520 --> 00:07:28,940
+base model.
+
+224
+00:07:29,800 --> 00:07:31,720
+On the phone, one base model stays in
+
+225
+00:07:31,720 --> 00:07:33,660
+memory, and the small adapters get swapped in
+
+226
+00:07:33,660 --> 00:07:34,940
+and out depending on the task.
+
+227
+00:07:37,560 --> 00:07:40,020
+Even a small model needs a plan for
+
+228
+00:07:40,020 --> 00:07:40,560
+the hardware.
+
+229
+00:07:41,160 --> 00:07:43,000
+An iPhone has several kinds of processors.
+
+230
+00:07:43,620 --> 00:07:45,980
+The CPU does general purpose work.
+
+231
+00:07:46,300 --> 00:07:48,940
+The GPU handles lots of number operations at
+
+232
+00:07:48,940 --> 00:07:49,640
+the same time.
+
+233
+00:07:50,080 --> 00:07:53,100
+The Apple Neural Engine runs machine learning work
+
+234
+00:07:53,100 --> 00:07:53,600
+efficiently.
+
+235
+00:07:53,940 --> 00:07:55,900
+But you can't just point the model at
+
+236
+00:07:55,900 --> 00:07:57,140
+one of them and call it done.
+
+237
+00:07:57,620 --> 00:07:59,080
+You still have to pick the right data
+
+238
+00:07:59,080 --> 00:08:01,740
+layouts, split big arrays into pieces that are
+
+239
+00:08:01,740 --> 00:08:04,480
+easy to handle, and avoid extra memory copies.
+
+240
+00:08:05,160 --> 00:08:07,140
+It's a lot like moving boxes between rooms.
+
+241
+00:08:07,740 --> 00:08:09,620
+Carry one at a time and copy each
+
+242
+00:08:09,620 --> 00:08:11,480
+one along the way, and it takes forever.
+
+243
+00:08:12,020 --> 00:08:14,060
+Pack well and carry smart, and it goes
+
+244
+00:08:14,060 --> 00:08:14,420
+fast.
+
+245
+00:08:15,080 --> 00:08:17,860
+Those small choices change both speed and memory
+
+246
+00:08:17,860 --> 00:08:18,240
+use.
+
+247
+00:08:18,880 --> 00:08:19,480
+Trick five.
+
+248
+00:08:19,900 --> 00:08:21,100
+Know when to ask for help.
+
+249
+00:08:21,800 --> 00:08:23,360
+Even with all of that, the model on
+
+250
+00:08:23,360 --> 00:08:24,220
+the phone has limits.
+
+251
+00:08:24,480 --> 00:08:25,140
+And that's fine.
+
+252
+00:08:25,620 --> 00:08:27,820
+The small model is good at summarizing, pulling
+
+253
+00:08:27,820 --> 00:08:30,340
+out information, and sorting things into categories.
+
+254
+00:08:30,900 --> 00:08:33,520
+When a request comes in, Apple Intelligence first
+
+255
+00:08:33,520 --> 00:08:35,220
+checks whether the phone can handle it.
+
+256
+00:08:35,659 --> 00:08:37,520
+If the job is harder, the request can
+
+257
+00:08:37,520 --> 00:08:39,140
+go to private cloud compute.
+
+258
+00:08:39,820 --> 00:08:42,200
+Private cloud compute is a protected space in
+
+259
+00:08:42,200 --> 00:08:42,580
+the cloud.
+
+260
+00:08:43,140 --> 00:08:45,780
+Only authorized software can process your data there,
+
+261
+00:08:45,780 --> 00:08:47,940
+and outside parties are blocked from seeing it.
+
+262
+00:08:48,580 --> 00:08:51,140
+Your device encrypts the request for verified servers
+
+263
+00:08:51,140 --> 00:08:53,280
+and sends it over an encrypted connection.
+
+264
+00:08:53,880 --> 00:08:56,160
+Any machine outside that boundary doesn't have the
+
+265
+00:08:56,160 --> 00:08:56,860
+keys to read it.
+
+266
+00:08:57,400 --> 00:08:59,380
+The goal is that even Apple's own staff
+
+267
+00:08:59,380 --> 00:09:01,340
+and admin systems can't see what's in your
+
+268
+00:09:01,340 --> 00:09:01,740
+request.
+
+269
+00:09:02,520 --> 00:09:05,060
+Once it arrives, a separate, larger server model
+
+270
+00:09:05,060 --> 00:09:05,700
+takes over.
+
+271
+00:09:06,200 --> 00:09:09,000
+It uses something called mixture of experts computation,
+
+272
+00:09:09,480 --> 00:09:11,260
+along with parallel processing tracks.
+
+273
+00:09:11,900 --> 00:09:13,920
+Put simply, a big model can pick the
+
+274
+00:09:13,920 --> 00:09:16,140
+best parts of itself for each job, spread
+
+275
+00:09:16,140 --> 00:09:17,000
+the work around.
+
+276
+00:09:17,560 --> 00:09:19,000
+So the system has two gears.
+
+277
+00:09:19,440 --> 00:09:20,680
+Do it on the phone when you can,
+
+278
+00:09:20,820 --> 00:09:22,240
+and call the cloud when you have to.
+
+279
+00:09:23,140 --> 00:09:25,060
+Now, what's new in 2026?
+
+280
+00:09:25,860 --> 00:09:27,500
+Apple keeps updating these models.
+
+281
+00:09:28,160 --> 00:09:31,240
+This year it launched AFM3 Core, a new
+
+282
+00:09:31,240 --> 00:09:34,220
+generation of the 3 billion parameter model, along
+
+283
+00:09:34,220 --> 00:09:36,320
+with AFM3 Core Advanced.
+
+284
+00:09:37,300 --> 00:09:39,100
+Core Advanced is a sparse model.
+
+285
+00:09:39,640 --> 00:09:40,320
+What does that mean?
+
+286
+00:09:40,640 --> 00:09:43,780
+In a normal or dense model, every parameter
+
+287
+00:09:43,780 --> 00:09:45,020
+works on every token.
+
+288
+00:09:45,580 --> 00:09:47,620
+A sparse model is split into lots of
+
+289
+00:09:47,620 --> 00:09:50,940
+smaller specialist parts called experts, and for each
+
+290
+00:09:50,940 --> 00:09:52,700
+job it wakes up only the ones it
+
+291
+00:09:52,700 --> 00:09:53,060
+needs.
+
+292
+00:09:53,560 --> 00:09:54,900
+The rest just sit idle.
+
+293
+00:09:55,620 --> 00:09:57,460
+It's like a big hospital with hundreds of
+
+294
+00:09:57,460 --> 00:09:57,780
+doctors.
+
+295
+00:09:58,160 --> 00:09:59,580
+You only ever see the two or three
+
+296
+00:09:59,580 --> 00:10:00,500
+who match your problem.
+
+297
+00:10:01,660 --> 00:10:04,720
+Core Advanced has 20 billion parameters in total,
+
+298
+00:10:05,040 --> 00:10:06,860
+but only one to four billion are active
+
+299
+00:10:06,860 --> 00:10:08,540
+at a time, depending on what the Apple
+
+300
+00:10:08,540 --> 00:10:09,820
+Silicon system can handle.
+
+301
+00:10:10,160 --> 00:10:11,580
+So you get the knowledge of a big
+
+302
+00:10:11,580 --> 00:10:13,380
+model at roughly the running cost of a
+
+303
+00:10:13,380 --> 00:10:13,820
+small one.
+
+304
+00:10:14,420 --> 00:10:16,200
+The storage side is clever too.
+
+305
+00:10:16,680 --> 00:10:18,980
+The full model lives on flash storage, and
+
+306
+00:10:18,980 --> 00:10:21,140
+only the experts your prompt needs get loaded
+
+307
+00:10:21,140 --> 00:10:21,740
+into memory.
+
+308
+00:10:22,380 --> 00:10:24,720
+The system doesn't swap experts in from flash
+
+309
+00:10:24,720 --> 00:10:25,840
+for every single token.
+
+310
+00:10:26,500 --> 00:10:28,500
+Think of a huge library in the basement,
+
+311
+00:10:28,780 --> 00:10:30,480
+with just a few books you need sitting
+
+312
+00:10:30,480 --> 00:10:31,020
+on your desk.
+
+313
+00:10:31,660 --> 00:10:33,360
+The cloud side grew as well.
+
+314
+00:10:33,740 --> 00:10:36,180
+Private cloud compute workloads can now run on
+
+315
+00:10:36,180 --> 00:10:38,480
+NVIDIA GPUs in Google Cloud.
+
+316
+00:10:39,120 --> 00:10:41,540
+Zoom out and there's one idea underneath all
+
+317
+00:10:41,540 --> 00:10:41,840
+of this.
+
+318
+00:10:41,840 --> 00:10:44,400
+The model's power should match the resources it
+
+319
+00:10:44,400 --> 00:10:45,440
+has at runtime.
+
+320
+00:10:46,160 --> 00:10:48,480
+A small phone gets a small squeezed model.
+
+321
+00:10:48,820 --> 00:10:50,980
+A stronger device can wake up more experts.
+
+322
+00:10:51,380 --> 00:10:53,160
+A hard request can go to the cloud.
+
+323
+00:10:53,480 --> 00:10:56,280
+No single model has to fit every situation,
+
+324
+00:10:56,640 --> 00:10:57,700
+so the system adapts.
+
+325
+00:10:58,520 --> 00:10:59,920
+So what can you take from this for
+
+326
+00:10:59,920 --> 00:11:00,640
+your own work?
+
+327
+00:11:01,080 --> 00:11:02,480
+Here are six things I'd remember.
+
+328
+00:11:03,160 --> 00:11:04,360
+Know your two walls.
+
+329
+00:11:04,780 --> 00:11:07,560
+Memory size and memory speed are separate problems,
+
+330
+00:11:07,700 --> 00:11:08,740
+and you need to deal with both.
+
+331
+00:11:09,400 --> 00:11:10,520
+Compress carefully.
+
+332
+00:11:10,520 --> 00:11:12,920
+Spend more bits where the model is sensitive
+
+333
+00:11:12,920 --> 00:11:15,280
+and fewer where it's tough, and train with
+
+334
+00:11:15,280 --> 00:11:16,420
+the compression in mind.
+
+335
+00:11:17,180 --> 00:11:18,800
+Watch the cache, not just the weights.
+
+336
+00:11:19,300 --> 00:11:21,500
+Long inputs can fill up memory even when
+
+337
+00:11:21,500 --> 00:11:22,340
+the model is small.
+
+338
+00:11:23,140 --> 00:11:25,060
+Share the base and swap the hats.
+
+339
+00:11:25,460 --> 00:11:28,100
+Adapters let many features live on one foundation.
+
+340
+00:11:29,000 --> 00:11:30,940
+Match your code to the hardware.
+
+341
+00:11:31,620 --> 00:11:34,580
+Layouts, chunking, and fewer copies matter nearly as
+
+342
+00:11:34,580 --> 00:11:35,640
+much as the chip itself.
+
+343
+00:11:36,140 --> 00:11:37,540
+And plan a fallback.
+
+344
+00:11:38,020 --> 00:11:39,180
+Run locally first.
+
+345
+00:11:39,180 --> 00:11:41,120
+Go to the cloud only when the job
+
+346
+00:11:41,120 --> 00:11:41,660
+needs it.
+
+347
+00:11:42,100 --> 00:11:43,700
+And protect the data on the way there.
+
+348
+00:11:44,480 --> 00:11:46,700
+To wrap up, Apple didn't get a language
+
+349
+00:11:46,700 --> 00:11:49,120
+model onto an iPhone by finding one big
+
+350
+00:11:49,120 --> 00:11:49,580
+secret.
+
+351
+00:11:50,140 --> 00:11:52,560
+It got there by spotting waste and cutting
+
+352
+00:11:52,560 --> 00:11:54,200
+it out, one piece at a time.
+
+353
+00:11:54,780 --> 00:11:55,460
+Smaller weights.
+
+354
+00:11:55,900 --> 00:11:56,660
+A slimmer cache.
+
+355
+00:11:57,100 --> 00:11:58,800
+A shared base with light adapters.
+
+356
+00:11:59,080 --> 00:12:00,280
+Code built for the hardware.
+
+357
+00:12:00,720 --> 00:12:02,600
+And a safe path to the cloud for
+
+358
+00:12:02,600 --> 00:12:03,580
+when the phone needs help.
+
+359
+00:12:03,880 --> 00:12:07,220
+If you're building AI for limited devices, that's
+
+360
+00:12:07,220 --> 00:12:07,700
+the takeaway.
+
+361
+00:12:07,700 --> 00:12:10,520
+Before you ask for a bigger device, go
+
+362
+00:12:10,520 --> 00:12:11,720
+looking for what you're wasting.

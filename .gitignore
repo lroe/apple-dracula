@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+video/node_modules/
+
+# local Remotion cache / build output
+video/.remotion/
+video/.cache/
+video/build/
+
+# keep only curated preview assets
+video/out/*
+!video/out/qa/
+!video/out/qa/**
+!video/out/hero.png
+!video/out/preview-sheet.png
+
+# root source audio is duplicated in video/public for Remotion
+/audio.wav
+
+# OS noise
+.DS_Store
+*.log
