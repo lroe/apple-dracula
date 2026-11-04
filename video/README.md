@@ -58,6 +58,8 @@ The production timing sheet is at `../storyboard.md`.
 
 ## 2K render (Colab)
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lroe/apple-dracula/blob/main/video/colab_render.ipynb)
+
 Open `colab_render.ipynb` in Colab. It mounts Google Drive first, clones the public repo, and runs `render-2k.mjs`.
 
 - Output: **2560×1440**, 30 fps, H.264 CRF 18, AAC 320 kbps

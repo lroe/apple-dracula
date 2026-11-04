@@ -7,3 +7,4 @@
 - Production timing sheet: [`storyboard.md`](storyboard.md)
 - Style spec: [`skill.md`](skill.md)
 - 2K Colab render: [`video/colab_render.ipynb`](video/colab_render.ipynb)
+- [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lroe/apple-dracula/blob/main/video/colab_render.ipynb)
