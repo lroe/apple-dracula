@@ -129,7 +129,7 @@ export const OtherMemory: React.FC<SceneProps> = ({start}) => {
       <Line x1={240} y1={604} x2={240} y2={612} stroke={COLORS.red} strokeWidth={2.6} draw={p(75.8)} seed={1119} />
       <Line x1={1574} y1={604} x2={1574} y2={612} stroke={COLORS.red} strokeWidth={2.6} draw={p(75.8)} seed={1120} />
       <Arrow x1={1494} y1={608} x2={1494} y2={538} color={COLORS.red} width={3.2} draw={p(76.0, 0.7)} seed={1121} />
-      <Text x={1250} y={582} size={25} tone="red" draw={p(76.2)}>
+      <Text x={1250} y={560} size={25} tone="red" draw={p(76.2)}>
         also needs room
       </Text>
 

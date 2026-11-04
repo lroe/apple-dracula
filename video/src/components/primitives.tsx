@@ -8,6 +8,13 @@ import {
 } from '../lib/theme';
 import {Arrow, Circle, Ellipse, Line, Path, Rect} from '../lib/rough';
 
+/**
+ * Phone-safe type floor for the single 16:9 YouTube master.
+ * 36 px source ≈ 16 pt when watched fullscreen on a 6.1" phone in landscape.
+ * Any label smaller than this is either auto-raised or removed.
+ */
+export const MIN_TEXT_SIZE = 36;
+
 export const Text: React.FC<{
   x: number;
   y: number;
@@ -47,6 +54,7 @@ export const Text: React.FC<{
 }) => {
   const p = Math.max(0, Math.min(1, draw));
   const scale = mode === 'pop' ? 0.92 + 0.08 * p : 1;
+  const finalSize = Math.max(size, MIN_TEXT_SIZE);
   const isTopHeading =
     typeof children === 'string' &&
     children.trim().length > 8 &&
@@ -63,7 +71,7 @@ export const Text: React.FC<{
         top: y,
         width,
         fontFamily: font === 'title' ? fontTitle : fontLabel,
-        fontSize: size,
+        fontSize: finalSize,
         fontWeight: weight,
         color: color ?? toneColor(tone),
         textAlign: align,

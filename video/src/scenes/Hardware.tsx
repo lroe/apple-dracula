@@ -112,10 +112,10 @@ export const MovingBoxes: React.FC<SceneProps> = ({start}) => {
       {/* bad lane */}
       <Rect x={150} y={240} w={230} h={230} fill={COLORS.card} stroke={COLORS.ink} strokeWidth={3} draw={p(485.6)} seed={5401} />
       <Rect x={1540} y={240} w={230} h={230} fill={COLORS.card} stroke={COLORS.ink} strokeWidth={3} draw={p(485.7)} seed={5402} />
-      <Text x={150} y={216} size={26} align="center" width={230} tone="faint" draw={p(485.8)} style={{left: 150}}>
+      <Text x={150} y={188} size={26} align="center" width={230} tone="faint" draw={p(485.8)} style={{left: 150}}>
         room A
       </Text>
-      <Text x={1540} y={216} size={26} align="center" width={230} tone="faint" draw={p(485.8)} style={{left: 1540}}>
+      <Text x={1540} y={188} size={26} align="center" width={230} tone="faint" draw={p(485.8)} style={{left: 1540}}>
         room B
       </Text>
       <Line x1={390} y1={355} x2={1530} y2={355} stroke={COLORS.red} strokeWidth={2.4} draw={p(487.6)} seed={5410} dash={[8, 8]} />

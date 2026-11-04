@@ -393,8 +393,8 @@ export const LookupTable: React.FC<SceneProps> = ({start}) => {
         note = 00
       </Text>
       <Arrow x1={1284} y1={486} x2={1112} y2={486} color={COLORS.sage} width={3} draw={p(178.1)} seed={2551} />
-      <Text x={1130} y={452} size={24} tone="sage" draw={p(178.3)}>
-        points to row 00
+      <Text x={1118} y={512} size={24} align="center" width={170} tone="sage" draw={p(178.3)}>
+        to row 00
       </Text>
     </Stage>
   );
@@ -609,10 +609,7 @@ export const Sensitivity: React.FC<SceneProps> = ({start}) => {
         />
       ))}
       <Arrow x1={520} y1={540} x2={520} y2={610} color={COLORS.red} width={3} draw={p(234.3)} seed={2920} />
-      <Text x={460} y={560} size={24} tone="red" draw={p(234.5)}>
-        squeeze
-      </Text>
-      <Text x={340} y={760} size={28} tone="sage" draw={p(234.8)}>
+      <Text x={340} y={770} size={28} tone="sage" draw={p(234.8)}>
         2 bits
       </Text>
 
@@ -628,7 +625,7 @@ export const Sensitivity: React.FC<SceneProps> = ({start}) => {
         const a = (i / 8) * Math.PI * 2;
         return <Circle key={i} cx={875 + Math.cos(a) * 92} cy={660 + Math.sin(a) * 92} d={26} stroke={COLORS.ink} strokeWidth={2} draw={p(231.5 + i * 0.06)} seed={2940 + i} />;
       })}
-      <Text x={760} y={790} size={28} tone="sage" draw={p(236.8)}>
+      <Text x={760} y={770} size={28} tone="sage" draw={p(236.8)}>
         4 bits
       </Text>
 
@@ -690,7 +687,7 @@ export const DecoderEmbed: React.FC<SceneProps> = ({start}) => {
         4-bit
       </Text>
 
-      <Text x={1060} y={370} size={26} tone="faint" draw={p(254.0)}>
+      <Text x={1060} y={354} size={26} tone="faint" draw={p(254.0)}>
         look up a token
       </Text>
       <TokenMini x={1060} y={402} label="cat" draw={p(254.1)} seed={3030} />

@@ -95,7 +95,9 @@ export const SketchNode: React.FC<{
 }) => {
   const paths = usePaths(shape, {
     stroke,
-    strokeWidth,
+    // Phone-safe minimum: keep diagram strokes from disappearing when the
+    // 16:9 master is watched on a phone.
+    strokeWidth: Math.max(strokeWidth, 3),
     fill,
     fillStyle,
     hachureGap,

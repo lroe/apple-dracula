@@ -1,6 +1,6 @@
 # Apple on-device LLM — Remotion preview
 
-Repo: https://github.com/lroe/How-Apple-Fits-a-Large-Language-Model-on-Your-iPhone.
+Repo: https://github.com/lroe/apple-dracula
 
 Minimalist hand-drawn explainer built from `audio.wav` (12:12.16) and `audio.srt`, with word-level Whisper timing.
 
@@ -19,7 +19,7 @@ Studio opens at **http://localhost:3000** by default (composition `AppleExplaine
 - Duration: 21,965 frames / 732.16 s
 - Audio: `public/audio.wav`
 
-**No final video has been rendered.** Dracula-themed still frames were rendered for layout QA (`out/qa/`, `out/preview-sheet.png`, `out/hero.png`).
+**No final video has been rendered locally.** Dracula-themed still frames were rendered for layout QA (`out/qa/`, `out/preview-sheet.png`, `out/hero.png`). The Colab notebook renders the 2K YouTube master.
 
 To refresh the preview stills without rendering the MP4:
 
@@ -34,6 +34,8 @@ npm run preview
 - Dracula night canvas (`#282A36`), foreground ink (`#F8F8F2`), red (`#FF5555`), green (`#50FA7B`), current-line surface (`#44475A`), and deep comment fills (`#6272A4`).
 - Caveat for display type; Patrick Hand for labels.
 - Secondary text is **lavender-grey `#B8B9C5`**, never the low-contrast comment blue.
+- Phone-safe pass: minimum **36px** text at 1080p, minimum **3px** diagram strokes, 4px groundlines. Labels that cannot fit at 36px are cut rather than shrunk.
+- Single **16:9 YouTube master**: comfortable on desktop and phone landscape/fullscreen; portrait still requires rotating the phone.
 - Word-level sync: every reveal uses an absolute cue from `src/data/words.json`; frame = seconds × 30.
 - Arrows are drawn with the arrowhead tip exactly at the target edge. Source/target anchors are explicit in scene code.
 - Layout zones are fixed; QA frames were rendered at the end of each scene to check collisions.
@@ -49,20 +51,31 @@ src/lib/rough.tsx        Rough.js path generation + arrow geometry
 out/qa/                  still-frame QA renders for every scene
 out/preview-sheet.png    57-frame overview contact sheet
 render-preview.mjs       still-only preview renderer (no MP4)
+render-2k.mjs            2K YouTube master renderer
 ```
 
 The production timing sheet is at `../storyboard.md`.
 
-## 4K render (Colab)
+## 2K render (Colab)
 
-Open `colab_render.ipynb` in Colab. It clones the private repo with a GitHub token and runs `render-4k.mjs`.
+Open `colab_render.ipynb` in Colab. It mounts Google Drive first, clones the public repo, and runs `render-2k.mjs`.
 
-- Output: **3840×2160**, 30 fps, H.264 CRF 16, AAC 320 kbps
-- Every completed frame prints as `[frame 00000/21965] ... %`
-- A 12-frame 4K test runs first
-- Rendering is CPU-heavy; expect **2–6 hours** on a free Colab CPU runtime and less on High-RAM / more vCPUs
+- Output: **2560×1440**, 30 fps, H.264 CRF 18, AAC 320 kbps
+- Tuned for a **2-core Colab CPU runtime**: `CONCURRENCY=2`, `veryfast` x264, JPEG frame capture
+- Prints **percent, frames, fps, elapsed time and ETA every ~3 seconds**
+- A 12-frame 2K test runs first
+- When the full render finishes, the notebook copies the MP4 and log to `MyDrive/apple-render/`
+- Expect roughly **4–7 hours** for the full 12-minute video on 2 cores; a free Colab runtime can still disconnect
 
 Command used under the hood:
+
+```bash
+CONCURRENCY=2 node render-2k.mjs
+```
+
+## Optional 4K render
+
+A 4K renderer is still available (`render-4k.mjs`) if you need a 3840×2160 master on a higher-core runtime:
 
 ```bash
 CONCURRENCY=4 node render-4k.mjs

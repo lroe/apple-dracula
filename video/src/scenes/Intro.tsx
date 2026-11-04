@@ -109,7 +109,7 @@ export const ThreeJobs: React.FC<SceneProps> = ({start}) => {
 
       <Phone x={150} y={360} w={230} h={470} draw={p(9.7, 0.9)} screenFill={COLORS.screen} />
       <DotGrid x={196} y={448} cols={5} rows={6} gap={28} r={3} progress={p(9.85, 1.0)} opacity={0.65} />
-      <Text x={265} y={760} size={30} align="center" width={230} draw={p(9.85)} style={{left: 150}}>
+      <Text x={265} y={720} size={30} align="center" width={230} draw={p(9.85)} style={{left: 150}}>
         small model
       </Text>
 
@@ -264,7 +264,7 @@ export const NoSlow: React.FC<SceneProps> = ({start}) => {
       </Text>
 
       {/* battery */}
-      <Rect x={1240} y={430} w={410} h={185} fill={COLORS.card} stroke={COLORS.ink} strokeWidth={3} draw={p(23.6)} seed={609} />
+      <Rect x={1240} y={430} w={410} h={215} fill={COLORS.card} stroke={COLORS.ink} strokeWidth={3} draw={p(23.6)} seed={609} />
       <Text x={1268} y={452} size={36} draw={p(23.7)}>
         battery
       </Text>
@@ -423,7 +423,7 @@ export const Tokens: React.FC<SceneProps> = ({start}) => {
       ))}
 
       {/* examples on the right */}
-      <Text x={1040} y={300} size={26} tone="faint" draw={p(46.9)}>
+      <Text x={1040} y={294} size={26} tone="faint" draw={p(46.9)}>
         one word
       </Text>
       <Token x={1040} y={340} w={180} h={78} label="cat" draw={p(47.24)} seed={840} />
@@ -431,7 +431,7 @@ export const Tokens: React.FC<SceneProps> = ({start}) => {
         whole word
       </Text>
 
-      <Text x={1040} y={500} size={26} tone="faint" draw={p(48.0)}>
+      <Text x={1040} y={494} size={26} tone="faint" draw={p(48.0)}>
         pieces
       </Text>
       {[
@@ -445,7 +445,7 @@ export const Tokens: React.FC<SceneProps> = ({start}) => {
         word parts
       </Text>
 
-      <Text x={1040} y={710} size={26} tone="faint" draw={p(49.0)}>
+      <Text x={1040} y={704} size={26} tone="faint" draw={p(49.0)}>
         punctuation
       </Text>
       <Token x={1040} y={748} w={100} h={78} label="!" draw={p(49.4)} seed={850} fill={COLORS.sand} />

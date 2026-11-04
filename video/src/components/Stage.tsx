@@ -97,7 +97,7 @@ export const GroundLine: React.FC<{
       left: x1,
       top: y,
       width: (x2 - x1) * draw,
-      height: 3,
+      height: 4,
       background: tone === 'ink' ? COLORS.ink : COLORS[tone],
       opacity: 0.9,
     }}

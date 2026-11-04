@@ -49,7 +49,7 @@ export const KV: React.FC<SceneProps> = ({start}) => {
         the model needs its earlier work
       </Text>
 
-      <Text x={200} y={286} size={27} tone="faint" draw={p(324.6)}>
+      <Text x={200} y={270} size={27} tone="faint" draw={p(324.6)}>
         earlier tokens
       </Text>
       {['The', 'cat', 'sat', 'on', 'the'].map((w, i) => (

@@ -5,6 +5,8 @@
   "scripts": {
     "studio": "remotion studio src/index.ts --port 3000",
     "preview": "node render-preview.mjs",
+    "render:2k": "node render-2k.mjs",
+    "render:2k:test": "node render-2k.mjs --test",
     "render:4k": "node render-4k.mjs",
     "render:4k:test": "node render-4k.mjs --test",
     "still": "remotion still src/index.ts AppleExplainer",

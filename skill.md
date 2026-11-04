@@ -7,7 +7,8 @@ Generates storyboards, timing sheets, visual scripts, and production prompts mat
 ## 1. Visual Identity & Aesthetic Rules
 
 * **Canvas:** Dracula night background (`#282A36`), zero gradients, zero drop shadows.
-* **Linework:** Hand-drawn ink style (chalk/monoline with subtle organic roughness), consistent stroke weight (`3px–4px`), Dracula foreground (`#F8F8F2`).
+* **Linework:** Hand-drawn ink style (chalk/monoline with subtle organic roughness), consistent stroke weight (`3px–4px`), Dracula foreground (`#F8F8F2`). **Phone-safe floor:** no diagram stroke below `3px` at 1080p; groundlines use `4px`.
+* **Phone-safe type floor (single 16:9 YouTube master):** No on-screen text below `36px` at 1080p. Secondary labels `36–44px`, key labels `48–56px`, headlines `72–80px`. If a label cannot fit at `36px`, cut it or move that detail into narration instead of shrinking it.
 * **Palette (Dracula):**
   * Base: Dracula background (`#282A36`) + foreground (`#F8F8F2`).
   * Surface: Dracula current line (`#44475A`) for highlighted/active cards; use `#313342` for standard panels and `#1E1F29` for recessed wells/screens.
